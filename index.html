@@ -1,90 +1,142 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Crack the Code</title>
 
-    <link rel="stylesheet" href="style.css" />
-  </head>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-  <body>
+<body>
+
     <div class="game">
-      <header>
-        <h1>🔐 CRACK THE CODE</h1>
-        <p>Descubre el código secreto antes de quedarte sin intentos.</p>
-      </header>
 
-      <section class="stats">
-        <div class="stat">
-          <span>NIVEL</span>
-          <strong id="level">1</strong>
-        </div>
+        <header>
+            <h1>🔐 CRACK THE CODE</h1>
+            <p>Descubre el código secreto antes de quedarte sin intentos.</p>
+        </header>
 
-        <div class="stat">
-          <span>INTENTOS</span>
-          <strong id="attempts">8</strong>
-        </div>
+        <!-- ESTADÍSTICAS -->
+        <section class="stats">
 
-        <div class="stat">
-          <span>TIEMPO</span>
-          <strong id="timer">60</strong>
-        </div>
+            <div class="stat">
+                <span>NIVEL</span>
+                <strong id="level">1</strong>
+            </div>
 
-        <div class="stat">
-          <span>PUNTOS</span>
-          <strong id="score">0</strong>
-        </div>
-      </section>
+            <div class="stat">
+                <span>INTENTOS</span>
+                <strong id="attempts">8</strong>
+            </div>
 
-      <main>
-        <h2>¿Cuál es el código?</h2>
-        <div class="time-selector">
-          <label for="timeSelect">⏱️ Tiempo:</label>
+            <div class="stat">
+                <span>TIEMPO</span>
+                <strong id="timer">60</strong>
+            </div>
 
-          <select id="timeSelect">
-            <option value="15">15 segundos</option>
-            <option value="30">30 segundos</option>
-            <option value="60" selected>60 segundos</option>
-            <option value="90">90 segundos</option>
-            <option value="120">120 segundos</option>
-          </select>
-        </div>
+            <div class="stat">
+                <span>PUNTOS</span>
+                <strong id="score">0</strong>
+            </div>
 
-        <div id="secret" class="secret">
-          <span>?</span>
-          <span>?</span>
-          <span>?</span>
-          <span>?</span>
-        </div>
-
-        <p class="instruction">Introduce 4 números diferentes.</p>
-
-        <div class="input-area">
-          <input
-            type="text"
-            id="guess"
-            maxlength="4"
-            inputmode="numeric"
-            placeholder="0000"
-          />
-
-          <button id="checkButton">COMPROBAR</button>
-        </div>
-
-        <div id="message" class="message">🔎 Estoy pensando un código...</div>
-
-        <section class="clues">
-          <h3>📋 Pistas</h3>
-
-          <div id="history"></div>
         </section>
 
-        <button id="newGame" class="new-game">🔄 NUEVA PARTIDA</button>
-      </main>
+        <main>
+
+            <!-- SELECTOR DE TIEMPO -->
+            <div class="time-selector">
+
+                <label for="timeSelect">
+                    ⏱️ Tiempo:
+                </label>
+
+                <select id="timeSelect">
+
+                    <option value="15">
+                        15 segundos
+                    </option>
+
+                    <option value="30">
+                        30 segundos
+                    </option>
+
+                    <option value="60" selected>
+                        60 segundos
+                    </option>
+
+                    <option value="90">
+                        90 segundos
+                    </option>
+
+                    <option value="120">
+                        120 segundos
+                    </option>
+
+                </select>
+
+            </div>
+
+            <h2>¿Cuál es el código?</h2>
+
+            <!-- CÓDIGO OCULTO -->
+            <div id="secret" class="secret">
+
+                <span>?</span>
+                <span>?</span>
+                <span>?</span>
+                <span>?</span>
+
+            </div>
+
+            <p class="instruction">
+                Introduce 4 números diferentes.
+            </p>
+
+            <!-- INPUT -->
+            <div class="input-area">
+
+                <input
+                    type="text"
+                    id="guess"
+                    maxlength="4"
+                    inputmode="numeric"
+                    placeholder="0000"
+                >
+
+                <button id="checkButton">
+                    COMPROBAR
+                </button>
+
+            </div>
+
+            <!-- MENSAJE -->
+            <div id="message" class="message">
+                🔎 Estoy pensando un código...
+            </div>
+
+            <!-- HISTORIAL -->
+            <section class="clues">
+
+                <h3>📋 Pistas</h3>
+
+                <div id="history"></div>
+
+            </section>
+
+            <!-- NUEVO JUEGO -->
+            <button id="newGame" class="new-game">
+                🔄 NUEVA PARTIDA
+            </button>
+
+        </main>
+
     </div>
 
     <script src="script.js"></script>
-  </body>
+
+</body>
+
 </html>
