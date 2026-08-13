@@ -37,6 +37,11 @@ body {
         0 25px 70px rgba(0,0,0,0.5);
 }
 
+
+/* =========================
+   TITULO
+========================= */
+
 header {
     text-align: center;
 
@@ -55,6 +60,11 @@ header p {
     color: #aeb8d0;
 }
 
+
+/* =========================
+   ESTADISTICAS
+========================= */
+
 .stats {
     display: grid;
 
@@ -62,7 +72,7 @@ header p {
 
     gap: 10px;
 
-    margin-bottom: 35px;
+    margin-bottom: 30px;
 }
 
 .stat {
@@ -89,15 +99,83 @@ header p {
     font-size: 1.4rem;
 }
 
+
+/* =========================
+   SELECTOR DE TIEMPO
+========================= */
+
+.time-selector {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+
+    color: #aeb8d0;
+}
+
+.time-selector label {
+
+    font-weight: bold;
+
+    font-size: 1rem;
+}
+
+#timeSelect {
+
+    padding: 10px 15px;
+
+    border-radius: 10px;
+
+    border: 2px solid #364362;
+
+    background: #080d1b;
+
+    color: white;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+#timeSelect:hover {
+
+    border-color: #5874ff;
+}
+
+#timeSelect:focus {
+
+    border-color: #6c8cff;
+}
+
+
+/* =========================
+   JUEGO
+========================= */
+
 main {
     text-align: center;
 }
 
 main h2 {
+
     margin-bottom: 20px;
 }
 
+
+/* =========================
+   CODIGO
+========================= */
+
 .secret {
+
     display: flex;
 
     justify-content: center;
@@ -108,12 +186,15 @@ main h2 {
 }
 
 .secret span {
+
     width: 65px;
+
     height: 75px;
 
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     border-radius: 15px;
@@ -129,13 +210,25 @@ main h2 {
     color: #69789f;
 }
 
+
+/* =========================
+   INSTRUCCIONES
+========================= */
+
 .instruction {
+
     color: #8995b4;
 
     margin-bottom: 20px;
 }
 
+
+/* =========================
+   INPUT
+========================= */
+
 .input-area {
+
     display: flex;
 
     justify-content: center;
@@ -144,6 +237,7 @@ main h2 {
 }
 
 #guess {
+
     width: 180px;
 
     padding: 15px;
@@ -166,10 +260,12 @@ main h2 {
 }
 
 #guess:focus {
+
     border-color: #6c8cff;
 }
 
 button {
+
     border: none;
 
     border-radius: 12px;
@@ -183,21 +279,30 @@ button {
     transition: 0.2s;
 }
 
+button:hover {
+
+    transform: translateY(-2px);
+}
+
 #checkButton {
+
     background: #5874ff;
 
     color: white;
 }
 
-button:hover {
-    transform: translateY(-2px);
-}
-
 #checkButton:hover {
+
     background: #7189ff;
 }
 
+
+/* =========================
+   MENSAJE
+========================= */
+
 .message {
+
     min-height: 45px;
 
     display: flex;
@@ -217,17 +322,25 @@ button:hover {
     color: #dbe1f4;
 }
 
+
+/* =========================
+   PISTAS
+========================= */
+
 .clues {
+
     margin-top: 25px;
 
     text-align: left;
 }
 
 .clues h3 {
+
     margin-bottom: 12px;
 }
 
 .clue {
+
     display: flex;
 
     justify-content: space-between;
@@ -244,6 +357,7 @@ button:hover {
 }
 
 .clue-number {
+
     font-family: monospace;
 
     font-size: 1.2rem;
@@ -252,18 +366,22 @@ button:hover {
 }
 
 .correct {
+
     color: #54e58b;
 }
 
 .position {
+
     color: #ffc857;
 }
 
-.wrong {
-    color: #ff667a;
-}
+
+/* =========================
+   NUEVO JUEGO
+========================= */
 
 .new-game {
+
     margin-top: 25px;
 
     width: 100%;
@@ -274,73 +392,59 @@ button:hover {
 }
 
 .new-game:hover {
+
     background: #303c60;
 }
+
+
+/* =========================
+   MOVIL
+========================= */
 
 @media (max-width: 600px) {
 
     .game {
+
         padding: 20px;
     }
 
     header h1 {
+
         font-size: 1.8rem;
     }
 
     .stats {
+
         grid-template-columns: repeat(2, 1fr);
     }
 
     .input-area {
+
         flex-direction: column;
     }
 
     #guess {
+
         width: 100%;
     }
 
     #checkButton {
+
         width: 100%;
     }
 
     .secret span {
+
         width: 55px;
+
         height: 65px;
 
         font-size: 2rem;
     }
-}
 
-.time-selector {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    .time-selector {
 
-    margin-bottom: 20px;
+        flex-direction: column;
+    }
 
-    color: #aeb8d0;
-}
-
-.time-selector label {
-    font-weight: bold;
-}
-
-#timeSelect {
-    padding: 10px 15px;
-
-    border: 2px solid #364362;
-    border-radius: 10px;
-
-    background: #080d1b;
-    color: white;
-
-    font-size: 1rem;
-
-    cursor: pointer;
-}
-
-#timeSelect:focus {
-    outline: none;
-    border-color: #6c8cff;
 }
