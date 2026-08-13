@@ -1,31 +1,55 @@
+// ======================================
+// ELEMENTOS HTML
+// ======================================
+
 const guessInput = document.getElementById("guess");
-const timeSelect = document.getElementById("timeSelect");
+
 const checkButton = document.getElementById("checkButton");
+
 const newGameButton = document.getElementById("newGame");
 
 const message = document.getElementById("message");
+
 const history = document.getElementById("history");
 
-const attemptsElement = document.getElementById("attempts");
-const timerElement = document.getElementById("timer");
-const scoreElement = document.getElementById("score");
-const levelElement = document.getElementById("level");
+const attemptsElement =
+    document.getElementById("attempts");
+
+const timerElement =
+    document.getElementById("timer");
+
+const scoreElement =
+    document.getElementById("score");
+
+const levelElement =
+    document.getElementById("level");
+
+const timeSelect =
+    document.getElementById("timeSelect");
+
+
+// ======================================
+// VARIABLES
+// ======================================
 
 let secretCode = "";
 
 let attempts = 8;
+
 let time = 60;
+
 let score = 0;
+
 let level = 1;
 
-let timerInterval;
+let timerInterval = null;
 
 let gameOver = false;
 
 
-// ===============================
-// CREAR CÓDIGO
-// ===============================
+// ======================================
+// CREAR CODIGO SECRETO
+// ======================================
 
 function createSecretCode() {
 
@@ -33,9 +57,11 @@ function createSecretCode() {
 
     while (numbers.length < 4) {
 
-        const number = Math.floor(Math.random() * 10);
+        const number =
+            Math.floor(Math.random() * 10);
 
         if (!numbers.includes(number)) {
+
             numbers.push(number);
         }
     }
@@ -44,61 +70,160 @@ function createSecretCode() {
 }
 
 
-// ===============================
-// INICIAR JUEGO
-// ===============================
+// ======================================
+// OCULTAR CODIGO
+// ======================================
+
+function hideSecretCode() {
+
+    const secret =
+        document.getElementById("secret");
+
+    secret.innerHTML = `
+        <span>?</span>
+        <span>?</span>
+        <span>?</span>
+        <span>?</span>
+    `;
+}
+
+
+// ======================================
+// MOSTRAR CODIGO
+// ======================================
+
+function revealSecretCode() {
+
+    const secret =
+        document.getElementById("secret");
+
+    secret.innerHTML = "";
+
+    for (const number of secretCode) {
+
+        const span =
+            document.createElement("span");
+
+        span.textContent = number;
+
+        secret.appendChild(span);
+    }
+}
+
+
+// ======================================
+// INICIAR PARTIDA
+// ======================================
 
 function startGame() {
-secretCode = createSecretCode();
 
-attempts = 8;
+    // Crear código nuevo
+    secretCode =
+        createSecretCode();
 
-// Obtener el tiempo seleccionado
-time = Number(timeSelect.value);
+    // Reiniciar intentos
+    attempts = 8;
+
+    // IMPORTANTE:
+    // Tomar el tiempo seleccionado
+    time = parseInt(
+        timeSelect.value,
+        10
+    );
+
+    // Reiniciar estado
     gameOver = false;
 
-    attemptsElement.textContent = attempts;
-    timerElement.textContent = time;
+
+    // ==================================
+    // ACTUALIZAR PANTALLA
+    // ==================================
+
+    attemptsElement.textContent =
+        attempts;
+
+    timerElement.textContent =
+        time;
 
     history.innerHTML = "";
 
     message.textContent =
-        "🔎 El código secreto ha sido generado.";
+        "🔎 Estoy pensando un código...";
 
     guessInput.value = "";
 
     guessInput.disabled = false;
+
     checkButton.disabled = false;
+
+    hideSecretCode();
+
+
+    // ==================================
+    // DETENER CONTADOR ANTERIOR
+    // ==================================
 
     clearInterval(timerInterval);
 
-    timerInterval = setInterval(() => {
+
+    // ==================================
+    // INICIAR CONTADOR
+    // ==================================
+
+    timerInterval = setInterval(function () {
+
+        if (gameOver) {
+
+            clearInterval(timerInterval);
+
+            return;
+        }
 
         time--;
 
-        timerElement.textContent = time;
+        timerElement.textContent =
+            time;
+
+
+        // ==================================
+        // SE ACABÓ EL TIEMPO
+        // ==================================
 
         if (time <= 0) {
-            loseGame("⏰ ¡Se acabó el tiempo!");
+
+            time = 0;
+
+            timerElement.textContent = "0";
+
+            loseGame(
+                "⏰ ¡Se acabó el tiempo!"
+            );
         }
 
     }, 1000);
 }
 
 
-// ===============================
-// COMPROBAR CÓDIGO
-// ===============================
+// ======================================
+// COMPROBAR CODIGO
+// ======================================
 
 function checkCode() {
 
     if (gameOver) {
+
         return;
     }
 
-    const guess = guessInput.value.trim();
 
-    // Comprobar que sean 4 números
+    const guess =
+        guessInput.value.trim();
+
+
+    // ==================================
+    // VALIDAR 4 NUMEROS
+    // ==================================
+
     if (!/^\d{4}$/.test(guess)) {
 
         message.textContent =
@@ -107,8 +232,13 @@ function checkCode() {
         return;
     }
 
-    // Comprobar que no existan números repetidos
-    const uniqueNumbers = new Set(guess);
+
+    // ==================================
+    // NUMEROS REPETIDOS
+    // ==================================
+
+    const uniqueNumbers =
+        new Set(guess);
 
     if (uniqueNumbers.size !== 4) {
 
@@ -118,27 +248,38 @@ function checkCode() {
         return;
     }
 
+
+    // ==================================
+    // CALCULAR PISTAS
+    // ==================================
+
     let correctPosition = 0;
+
     let correctNumber = 0;
 
-    // --------------------------------
-    // PRIMERA PASADA:
-    // números en posición correcta
-    // --------------------------------
+
+    // ==================================
+    // PRIMERA PASADA
+    // POSICIONES CORRECTAS
+    // ==================================
 
     for (let i = 0; i < 4; i++) {
 
-        if (guess[i] === secretCode[i]) {
+        if (
+            guess[i] ===
+            secretCode[i]
+        ) {
 
             correctPosition++;
         }
     }
 
-    // --------------------------------
-    // SEGUNDA PASADA:
-    // números correctos pero
-    // posición incorrecta
-    // --------------------------------
+
+    // ==================================
+    // SEGUNDA PASADA
+    // NUMERO CORRECTO
+    // PERO POSICION INCORRECTA
+    // ==================================
 
     for (let i = 0; i < 4; i++) {
 
@@ -151,21 +292,31 @@ function checkCode() {
         }
     }
 
-    // Restar intento
+
+    // ==================================
+    // RESTAR INTENTO
+    // ==================================
+
     attempts--;
 
-    attemptsElement.textContent = attempts;
+    attemptsElement.textContent =
+        attempts;
 
-    // Mostrar pista
+
+    // ==================================
+    // MOSTRAR PISTA
+    // ==================================
+
     addClue(
         guess,
         correctPosition,
         correctNumber
     );
 
-    // --------------------------------
-    // GANADOR
-    // --------------------------------
+
+    // ==================================
+    // GANÓ
+    // ==================================
 
     if (correctPosition === 4) {
 
@@ -174,9 +325,10 @@ function checkCode() {
         return;
     }
 
-    // --------------------------------
-    // PERDEDOR
-    // --------------------------------
+
+    // ==================================
+    // SE QUEDÓ SIN INTENTOS
+    // ==================================
 
     if (attempts <= 0) {
 
@@ -187,9 +339,10 @@ function checkCode() {
         return;
     }
 
-    // --------------------------------
+
+    // ==================================
     // CONTINUAR
-    // --------------------------------
+    // ==================================
 
     message.textContent =
         `🔎 ${correctPosition} en posición correcta y ` +
@@ -200,9 +353,10 @@ function checkCode() {
     guessInput.focus();
 }
 
-// ===============================
-// AGREGAR PISTA
-// ===============================
+
+// ======================================
+// MOSTRAR PISTA
+// ======================================
 
 function addClue(
     guess,
@@ -210,14 +364,13 @@ function addClue(
     correctNumber
 ) {
 
-    const clue = document.createElement("div");
+    const clue =
+        document.createElement("div");
 
     clue.className = "clue";
 
-    const totalCorrect =
-        correctPosition + correctNumber;
-
     clue.innerHTML = `
+
         <span class="clue-number">
             ${guess}
         </span>
@@ -225,14 +378,13 @@ function addClue(
         <span>
 
             <span class="correct">
-                🟢 ${correctPosition} posición correcta
+                🟢 ${correctPosition}
             </span>
 
             <br>
 
             <span class="position">
-                🟡 ${correctNumber} número correcto
-                pero posición incorrecta
+                🟡 ${correctNumber}
             </span>
 
         </span>
@@ -240,11 +392,18 @@ function addClue(
 
     history.prepend(clue);
 }
-// ===============================
+
+
+// ======================================
 // GANAR
-// ===============================
+// ======================================
 
 function winGame() {
+
+    if (gameOver) {
+
+        return;
+    }
 
     gameOver = true;
 
@@ -252,95 +411,122 @@ function winGame() {
 
     revealSecretCode();
 
-    // Más puntos si queda más tiempo
-    const points = 100 + (attempts * 50) + (time * 5);
+
+    // ==================================
+    // CALCULAR PUNTOS
+    // ==================================
+
+    const points =
+        100 +
+        (attempts * 50) +
+        (time * 5);
 
     score += points;
 
-    scoreElement.textContent = score;
+    scoreElement.textContent =
+        score;
+
 
     message.textContent =
         `🏆 ¡CÓDIGO DESCIFRADO! +${points} puntos`;
 
     guessInput.disabled = true;
+
     checkButton.disabled = true;
-
-    setTimeout(() => {
-
-        level++;
-
-        levelElement.textContent = level;
-
-        message.textContent =
-            "🔥 ¡Nivel completado! Pulsa NUEVA PARTIDA para continuar.";
-
-    }, 1500);
 }
 
 
-// ===============================
+// ======================================
 // PERDER
-// ===============================
+// ======================================
 
 function loseGame(text) {
+
+    if (gameOver) {
+
+        return;
+    }
 
     gameOver = true;
 
     clearInterval(timerInterval);
 
-    // Mostrar el código correcto
     revealSecretCode();
 
+
     message.textContent =
-        `${text} 🔐 El código correcto era: ${secretCode}`;
+        `${text} 🔐 Código correcto: ${secretCode}`;
 
     guessInput.disabled = true;
+
     checkButton.disabled = true;
 }
 
-// ===============================
-// EVENTOS
-// ===============================
+
+// ======================================
+// BOTON COMPROBAR
+// ======================================
 
 checkButton.addEventListener(
     "click",
     checkCode
 );
 
+
+// ======================================
+// BOTON NUEVA PARTIDA
+// ======================================
+
 newGameButton.addEventListener(
     "click",
     startGame
 );
 
+
+// ======================================
+// ENTER PARA COMPROBAR
+// ======================================
+
 guessInput.addEventListener(
     "keydown",
-    event => {
+    function(event) {
 
         if (event.key === "Enter") {
+
             checkCode();
         }
-
     }
 );
-function revealSecretCode() {
 
-    const secretContainer = document.getElementById("secret");
 
-    secretContainer.innerHTML = "";
+// ======================================
+// CAMBIAR TIEMPO
+// ======================================
 
-    for (const number of secretCode) {
+timeSelect.addEventListener(
+    "change",
+    function() {
 
-        const span = document.createElement("span");
+        // Si no estamos jugando,
+        // actualizar el contador visual.
 
-        span.textContent = number;
+        if (!gameOver) {
 
-        secretContainer.appendChild(span);
+            time =
+                parseInt(
+                    timeSelect.value,
+                    10
+                );
+
+            timerElement.textContent =
+                time;
+        }
     }
-}
+);
 
 
-// ===============================
-// INICIAR
-// ===============================
+// ======================================
+// INICIAR AL CARGAR LA PAGINA
+// ======================================
 
 startGame();
