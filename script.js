@@ -98,8 +98,8 @@ function checkCode() {
 
     const guess = guessInput.value.trim();
 
-    // Validar longitud
-    if (guess.length !== 4) {
+    // Comprobar que sean 4 números
+    if (!/^\d{4}$/.test(guess)) {
 
         message.textContent =
             "⚠️ Debes introducir exactamente 4 números.";
@@ -107,13 +107,13 @@ function checkCode() {
         return;
     }
 
-    // Validar números repetidos
+    // Comprobar que no existan números repetidos
     const uniqueNumbers = new Set(guess);
 
     if (uniqueNumbers.size !== 4) {
 
         message.textContent =
-            "⚠️ Los números no pueden repetirse.";
+            "⚠️ Los 4 números deben ser diferentes.";
 
         return;
     }
@@ -121,30 +121,52 @@ function checkCode() {
     let correctPosition = 0;
     let correctNumber = 0;
 
-    // Revisar posiciones
+    // --------------------------------
+    // PRIMERA PASADA:
+    // números en posición correcta
+    // --------------------------------
+
     for (let i = 0; i < 4; i++) {
 
         if (guess[i] === secretCode[i]) {
 
             correctPosition++;
+        }
+    }
 
-        } else if (secretCode.includes(guess[i])) {
+    // --------------------------------
+    // SEGUNDA PASADA:
+    // números correctos pero
+    // posición incorrecta
+    // --------------------------------
+
+    for (let i = 0; i < 4; i++) {
+
+        if (
+            guess[i] !== secretCode[i] &&
+            secretCode.includes(guess[i])
+        ) {
 
             correctNumber++;
         }
     }
 
+    // Restar intento
     attempts--;
 
     attemptsElement.textContent = attempts;
 
+    // Mostrar pista
     addClue(
         guess,
         correctPosition,
         correctNumber
     );
 
-    // GANÓ
+    // --------------------------------
+    // GANADOR
+    // --------------------------------
+
     if (correctPosition === 4) {
 
         winGame();
@@ -152,24 +174,31 @@ function checkCode() {
         return;
     }
 
-    // PERDIÓ
+    // --------------------------------
+    // PERDEDOR
+    // --------------------------------
+
     if (attempts <= 0) {
 
         loseGame(
-            `💀 Perdiste. El código era ${secretCode}`
+            "💀 ¡Te quedaste sin intentos!"
         );
 
         return;
     }
 
+    // --------------------------------
+    // CONTINUAR
+    // --------------------------------
+
     message.textContent =
-        `🔐 ${correctPosition} correctos en posición y ${correctNumber} correctos pero mal ubicados.`;
+        `🔎 ${correctPosition} en posición correcta y ` +
+        `${correctNumber} en posición incorrecta.`;
 
     guessInput.value = "";
 
     guessInput.focus();
 }
-
 
 // ===============================
 // AGREGAR PISTA
@@ -185,26 +214,32 @@ function addClue(
 
     clue.className = "clue";
 
+    const totalCorrect =
+        correctPosition + correctNumber;
+
     clue.innerHTML = `
-        <span class="clue-number">${guess}</span>
+        <span class="clue-number">
+            ${guess}
+        </span>
 
         <span>
+
             <span class="correct">
-                🟢 ${correctPosition}
+                🟢 ${correctPosition} posición correcta
             </span>
 
-            &nbsp;
+            <br>
 
             <span class="position">
-                🟡 ${correctNumber}
+                🟡 ${correctNumber} número correcto
+                pero posición incorrecta
             </span>
+
         </span>
     `;
 
     history.prepend(clue);
 }
-
-
 // ===============================
 // GANAR
 // ===============================
@@ -214,6 +249,8 @@ function winGame() {
     gameOver = true;
 
     clearInterval(timerInterval);
+
+    revealSecretCode();
 
     // Más puntos si queda más tiempo
     const points = 100 + (attempts * 50) + (time * 5);
@@ -251,12 +288,15 @@ function loseGame(text) {
 
     clearInterval(timerInterval);
 
-    message.textContent = text;
+    // Mostrar el código correcto
+    revealSecretCode();
+
+    message.textContent =
+        `${text} 🔐 El código correcto era: ${secretCode}`;
 
     guessInput.disabled = true;
     checkButton.disabled = true;
 }
-
 
 // ===============================
 // EVENTOS
@@ -282,6 +322,21 @@ guessInput.addEventListener(
 
     }
 );
+function revealSecretCode() {
+
+    const secretContainer = document.getElementById("secret");
+
+    secretContainer.innerHTML = "";
+
+    for (const number of secretCode) {
+
+        const span = document.createElement("span");
+
+        span.textContent = number;
+
+        secretContainer.appendChild(span);
+    }
+}
 
 
 // ===============================
